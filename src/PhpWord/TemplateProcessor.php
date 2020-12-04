@@ -538,11 +538,34 @@ class TemplateProcessor
         $this->tempDocumentRelations[$partFileName] = str_replace('</Relationships>', $xmlImageRelation, $this->tempDocumentRelations[$partFileName]) . '</Relationships>';
     }
 
+
     /**
-     * @param mixed $search
-     * @param mixed $replace Path to image, or array("path" => xx, "width" => yy, "height" => zz)
-     * @param int $limit
+     * Set a new image
+     *
+     * @param string $search
+     * @param string $replace
      */
+     // Modify /var/www/webmon/web-mon.ru/webmon/vendor/phpoffice/phpword/src/PhpWord/TemplateProcessor.php
+    public function setImageValue($search, $replace)
+    {
+        // Sanity check
+        if (!file_exists($replace))
+        {
+            return;
+        }
+
+        // Delete current image
+        $this->zipClass->deleteName('word/media/' . $search);
+
+        // Add a new one
+        $this->zipClass->addFile($replace, 'word/media/' . $search);
+    }
+        /**
+         * @param mixed $search
+         * @param mixed $replace Path to image, or array("path" => xx, "width" => yy, "height" => zz)
+         * @param int $limit
+         */
+    /*
     public function setImageValue($search, $replace, $limit = self::MAXIMUM_REPLACEMENTS_DEFAULT)
     {
         // prepare $search_replace
@@ -613,6 +636,7 @@ class TemplateProcessor
             }
         }
     }
+    */
 
     /**
      * Returns count of all variables in template.
